@@ -28,7 +28,8 @@ def WriteFile(pathOut, icmDict):
         for row in icmDict:
             f.write('\n' + row + ' ' + icmDict[row].__len__().__str__())
             f.write('\n')
-            EnumerateErrors(icmDict[row], f)
+            if row.__contains__("Error"):
+                EnumerateErrors(icmDict[row], f)
             #for icm in icmDict[row]:
             #    f.write(icm + '\n')
             f.write('\n')
@@ -52,11 +53,11 @@ with open(pathIn, mode ='r') as file:
 
         if lines.__contains__("ErrorCode"):
             type = "Error"
-        elif lines.__contains__("[CPS Security Queue Size]"):
+        elif lines.__contains__("[CPS Security Queue Size"):
             type = "SecurityQueue"
-        elif lines.__contains__("[CPS Non-Security Queue Size]"):
+        elif lines.__contains__("[CPS Non-Security Queue Size"):
             type = "NonSecurityQueue"
-        elif lines.__contains__("Freshness") | lines.__contains__("MAXAGE"):
+        elif lines.__contains__("Freshness") | lines.__contains__("[CPS Maxage"):
             type = "Freshness"
 
         print(lines)
@@ -71,4 +72,4 @@ with open(pathIn, mode ='r') as file:
             env = "Prod"
         
         StoreIncident(icmDict, env, type, lines)
-        WriteFile("d:/reliabtest", icmDict=icmDict)
+WriteFile(pathOut, icmDict=icmDict)
