@@ -44,16 +44,6 @@ with open(pathIn, mode ='r') as file:
       
   # reading the CSV file  
   csvFile = csv.DictReader(file)  
-  spdfError = []  
-  spdfSecQ = []  
-  spdfNSecQ = []  
-  msitError = []  
-  msitSecQ = []  
-  msitNSceQ = []  
-  prodError = []  
-  prodSecQ = []  
-  prodNSecQ = []  
-  cri = []  
   icmDict = dict()
 
   # displaying the contents of the CSV file  
@@ -73,58 +63,12 @@ with open(pathIn, mode ='r') as file:
         if lines.__contains__("[CRI]"):
             env = "CRI"
             type = "Customer"
-            cri.append(lines)
         elif lines.__contains__("SPDF"):
             env = "SPDF"
-            if lines.__contains__("ErrorCode"):
-                spdfError.append(lines)
-            elif lines.__contains__("[CPS Security Queue Size]"):
-                spdfSecQ.append(lines)
-            elif lines.__contains__("[CPS Non-Security Queue Size]"):
-                spdfSecQ.append(lines)
         elif lines.__contains__("MSIT"):
             env = "MSIT"
-            if lines.__contains__("ErrorCode"):
-                msitError.append(lines)
-            elif lines.__contains__("[CPS Security Queue Size]"):
-                msitSecQ.append(lines)
-            elif lines.__contains__("[CPS Non-Security Queue Size]"):
-                msitNSceQ.append(lines)
         else:
             env = "Prod"
-            if lines.__contains__("ErrorCode"):
-                prodError.append(lines)
-            elif lines.__contains__("[CPS Security Queue Size]"):
-                prodSecQ.append(lines)
-            elif lines.__contains__("[CPS Non-Security Queue Size]"):
-                prodNSecQ.append(lines)
         
         StoreIncident(icmDict, env, type, lines)
         WriteFile("d:/reliabtest", icmDict=icmDict)
-        
-            
-with open(pathOut, 'w') as f:
-    f.write('\nSPDF Error Code:')
-    f.write(spdfError.__len__().__str__() + '\n')
-    EnumerateErrors(spdfError, f)
-    f.write('\nSPDF Security Queue Size:')
-    f.write(spdfSecQ.__len__().__str__() + '\n')
-    f.write('\nSPDF Non-Security Queue Size:')
-    f.write(spdfNSecQ.__len__().__str__() + '\n')
-    f.write('\nMSIT Error Code:')
-    f.write(msitError.__len__().__str__() + '\n')
-    EnumerateErrors(msitError, f)
-    f.write('\nMSIT Security Queue Size:')
-    f.write(msitSecQ.__len__().__str__() + '\n')
-    f.write('\nMSIT Non-Security Queue Size:')
-    f.write(msitNSceQ.__len__().__str__() + '\n')
-    f.write('\nProd Error Code:')
-    f.write(prodError.__len__().__str__() + '\n')
-    EnumerateErrors(prodError, f)
-    f.write('\nProd Security Queue Size:')
-    f.write(prodSecQ.__len__().__str__() + '\n')
-    f.write('\nProd Non-Security Queue Size:')
-    f.write(prodNSecQ.__len__().__str__() + '\n')
-    f.write('\nCRI:')
-    f.write(cri.__len__().__str__() + '\n')
-    f.close()
